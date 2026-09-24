@@ -1,5 +1,5 @@
 {
  "server": "https://wood-tire-given-vanilla.trycloudflare.com",
- "version": 0,
- "apk": ""
+ "version": 1,
+ "apk": "https://github.com/mosaadzomara1-tech/bakery-drivers/releases/latest/download/bakery-drivers.apk"
 }
