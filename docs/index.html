@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>سواقين المخبز</title>
+<link rel="icon" href="icon.png">
+<style>
+:root{--bg:#fff7ef;--card:#fff;--ink:#1b1f24;--mut:#6b7280;--line:#f1dcc6;--brand:#e0802e;--ok:#15803d;--okbg:#dcfce7;--warnbg:#fef3c7;--warn:#92400e}
+@media (prefers-color-scheme:dark){:root{--bg:#14110e;--card:#1d1916;--ink:#f1ece6;--mut:#a39a90;--line:#3a2f25;--okbg:#123321;--ok:#4ade80;--warnbg:#3a2a0c;--warn:#fbbf24}}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7}
+.wrap{max-width:520px;margin:0 auto;padding:16px}
+.hero{text-align:center;padding:12px 0 4px}
+.hero img{width:88px;height:88px;border-radius:22px}
+h1{font-size:24px;margin:8px 0 0}
+.sub{color:var(--mut);margin:4px 0 18px;text-align:center}
+.step{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+.step h2{font-size:17px;margin:0 0 8px;display:flex;gap:10px;align-items:center}
+.n{background:var(--brand);color:#fff;width:28px;height:28px;border-radius:99px;display:grid;place-items:center;font-size:15px;flex:none}
+.btn{display:block;width:100%;text-align:center;padding:15px;border-radius:14px;border:0;font-family:inherit;font-weight:700;font-size:18px;
+  background:var(--brand);color:#fff;text-decoration:none;margin-top:8px;cursor:pointer}
+input{width:100%;font:inherit;font-size:18px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
+ol{margin:4px 0 0;padding-inline-start:22px} li{margin:3px 0}
+.hint{background:var(--warnbg);color:var(--warn);border-radius:12px;padding:10px 12px;font-size:14px;margin-top:10px}
+.tabs{display:flex;gap:8px;margin-bottom:12px}
+.tab{flex:1;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.tab.act{background:var(--brand);color:#fff;border-color:var(--brand)}
+.foot{font-size:13px;color:var(--mut);text-align:center;margin:18px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero"><img src="icon.png" alt=""><h1>سواقين المخبز</h1></div>
+  <p class="sub">تطبيق الدوام: زرار واحد أول الدوام وزرار آخره.</p>
+
+  <div class="tabs"><button class="tab" data-p="and">أندرويد</button><button class="tab" data-p="ios">آيفون</button></div>
+
+  <section id="and">
+    <div class="step">
+      <h2><span class="n">١</span>نزّل التطبيق</h2>
+      <a class="btn" id="apk" href="#">📥 تحميل تطبيق سواقين المخبز</a>
+      <div class="hint">لو الموبايل قال «تطبيق من مصدر غير معروف» ← دوس <b>الإعدادات</b> ← فعّل <b>السماح من المصدر ده</b> ← ارجع ودوس <b>تثبيت</b>.</div>
+    </div>
+    <div class="step">
+      <h2><span class="n">٢</span>افتحه واكتب اسمك</h2>
+      <ol><li>اكتب اسمك مرة واحدة ← حفظ.</li><li>دوس <b>«ابدأ الدوام»</b>.</li>
+        <li>لما يسأل عن الموقع اختار <b>«السماح طوال الوقت»</b>.</li>
+        <li>من إعدادات التطبيق: البطارية ← <b>بلا قيود</b>.</li></ol>
+    </div>
+    <div class="step">
+      <h2><span class="n">٣</span>كل يوم</h2>
+      <ol><li>أول الدوام: <b>ابدأ الدوام</b> 🟢</li><li>آخر الدوام: <b>إنهاء الدوام</b> 🔴</li></ol>
+    </div>
+  </section>
+
+  <section id="ios" hidden>
+    <div class="step">
+      <h2><span class="n">١</span>نزّل التطبيق من App Store</h2>
+      <a class="btn" href="https://apps.apple.com/app/traccar-client/id843156974">تحميل Traccar Client</a>
+    </div>
+    <div class="step">
+      <h2><span class="n">٢</span>اكتب اسمك واضبطه</h2>
+      <input id="name" placeholder="اسمك (مثلاً: أحمد)">
+      <a class="btn" id="go" href="#">⚙ اضبط التطبيق تلقائياً</a>
+      <div class="hint">هيفتح التطبيق ويسأل عن الإعدادات ← دوس <b>OK</b>. بعدين شغّل الزرار واسمح بالموقع <b>«دائماً»</b>.</div>
+    </div>
+  </section>
+
+  <p class="foot">🔒 الموقع بيتبعت <b>بس وإنت في الدوام</b>. لما تنهي الدوام مفيش أي تتبّع.</p>
+</div>
+<script>
+let CFG = {};
+const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+function show(p){ document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('act', t.dataset.p===p));
+  document.getElementById('and').hidden = p!=='and'; document.getElementById('ios').hidden = p!=='ios'; }
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => show(t.dataset.p));
+show(isIOS ? 'ios' : 'and');
+fetch('config.json?t=' + Date.now()).then(r=>r.json()).then(c => {
+  CFG = c; if (c.apk) document.getElementById('apk').href = c.apk;
+}).catch(()=>{});
+const nameEl = document.getElementById('name');
+try { nameEl.value = localStorage.getItem('driverName') || ''; } catch(e) {}
+document.getElementById('go').onclick = e => {
+  e.preventDefault();
+  const n = nameEl.value.trim().replace(/\s+/g,' ');
+  if (n.length < 2) { nameEl.focus(); return; }
+  try { localStorage.setItem('driverName', n); } catch(e) {}
+  if (!CFG.server) { alert('السيرفر مش متاح دلوقتي — جرّب بعد دقيقة'); return; }
+  const p = new URLSearchParams({url: CFG.server, id: n, accuracy: 'high', interval: '30', distance: '0',
+    angle: '0', heartbeat: '60', buffer: 'true', stop_detection: 'false', wakelock: 'true'});
+  location.href = 'org.traccar.client://?' + p.toString();
+};
+</script>
+</body>
+</html>
