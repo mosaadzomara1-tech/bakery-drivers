@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>سواقين المخبز</title>
 <meta name="description" content="تطبيق دوام سواقين المخبز: زرار أول الدوام وزرار آخره.">
 <meta name="robots" content="noindex,nofollow">
@@ -13,140 +13,265 @@
 <meta property="og:image" content="https://mosaadzomara1-tech.github.io/bakery-drivers/icon.png">
 <link rel="icon" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#fff7ef;--card:#fff;--ink:#1b1f24;--mut:#6b7280;--line:#f1dcc6;--brand:#e0802e;--ok:#15803d;--okbg:#dcfce7;--warnbg:#fef3c7;--warn:#92400e}
-@media (prefers-color-scheme:dark){:root{--bg:#14110e;--card:#1d1916;--ink:#f1ece6;--mut:#a39a90;--line:#3a2f25;--okbg:#123321;--ok:#4ade80;--warnbg:#3a2a0c;--warn:#fbbf24}}
+:root{
+  --bg:#fbf5ee;--card:#ffffff;--ink:#1f1a15;--mut:#6f655b;--line:#efe3d5;
+  --brand:#e0802e;--brand-d:#b85f17;--brand-soft:#fdecdc;--on-brand:#fff;
+  --ok:#15803d;--okbg:#e3f6ea;--warn:#8a4b08;--warnbg:#fff3d6;--stop:#c2410c;--stopbg:#ffe7dc;
+  --shadow:0 1px 2px rgba(80,45,10,.06),0 6px 20px rgba(80,45,10,.06);
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#13100d;--card:#1d1814;--ink:#f3ede6;--mut:#a89c90;--line:#33291f;
+  --brand:#ee9447;--brand-d:#f5ae6e;--brand-soft:#33230f;--on-brand:#1f1204;
+  --ok:#5ee08f;--okbg:#10301d;--warn:#f7c661;--warnbg:#34260b;--stop:#ff9a6b;--stopbg:#3a1d10;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);
+}}
 *{box-sizing:border-box}
-body{margin:0;font-family:"Segoe UI",Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7}
-.wrap{max-width:520px;margin:0 auto;padding:16px}
-.hero{text-align:center;padding:12px 0 4px}
-.hero img{width:88px;height:88px;border-radius:22px}
-h1{font-size:24px;margin:8px 0 0}
-.sub{color:var(--mut);margin:4px 0 18px;text-align:center}
-.step{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
-.step h2{font-size:17px;margin:0 0 8px;display:flex;gap:10px;align-items:center}
-.n{background:var(--brand);color:#fff;width:28px;height:28px;border-radius:99px;display:grid;place-items:center;font-size:15px;flex:none}
-.btn{display:block;width:100%;text-align:center;padding:15px;border-radius:14px;border:0;font-family:inherit;font-weight:700;font-size:18px;
-  background:var(--brand);color:#fff;text-decoration:none;margin-top:8px;cursor:pointer}
-input{width:100%;font:inherit;font-size:18px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
-ol{margin:4px 0 0;padding-inline-start:22px} li{margin:3px 0}
-.hint{background:var(--warnbg);color:var(--warn);border-radius:12px;padding:10px 12px;font-size:14px;margin-top:10px}
-.tabs{display:flex;gap:8px;margin-bottom:12px}
-.tab{flex:1;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
-.tab.act{background:var(--brand);color:#fff;border-color:var(--brand)}
-.foot{font-size:13px;color:var(--mut);text-align:center;margin:18px 0}
-.okmsg{background:var(--okbg);color:var(--ok);border-radius:12px;padding:10px 12px;font-size:14px;margin-top:10px}
-.btn.alt{background:transparent;color:var(--brand);border:2px solid var(--brand)}
-details{border-top:1px solid var(--line);padding:8px 0} details:first-of-type{border-top:0}
-summary{cursor:pointer;font-weight:700}
-details p{margin:6px 0 0;color:var(--mut);font-size:15px}
-.ver{font-size:12px;color:var(--mut);text-align:center;margin-top:6px}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:"Tajawal","Segoe UI",Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.75;font-size:17px}
+.wrap{max-width:540px;margin:0 auto;padding:0 16px calc(24px + env(safe-area-inset-bottom))}
+b{font-weight:700}
+
+/* الهيدر */
+.hero{position:relative;margin:0 -16px 18px;padding:28px 20px 26px;text-align:center;color:#fff;
+  background:radial-gradient(120% 90% at 50% 0%,#f4a45c 0%,#e0802e 45%,#b85f17 100%);border-radius:0 0 28px 28px}
+.hero img{width:84px;height:84px;border-radius:22px;box-shadow:0 8px 24px rgba(60,25,0,.35);background:#fff}
+.hero h1{font-size:28px;font-weight:800;margin:12px 0 2px}
+.hero p{margin:0;opacity:.95;font-size:16px}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:14px}
+.chip{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:99px;padding:3px 12px;font-size:14px;font-weight:500}
+
+/* تنبيه المتصفح الداخلي */
+.banner{display:flex;gap:10px;align-items:flex-start;background:var(--warnbg);color:var(--warn);border-radius:14px;padding:12px 14px;margin-bottom:14px;font-size:15px}
+
+/* اختيار النوع */
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:16px;box-shadow:var(--shadow)}
+.seg button{font:inherit;font-weight:700;font-size:17px;padding:10px;border:0;border-radius:12px;background:transparent;color:var(--mut);cursor:pointer;transition:background .2s,color .2s}
+.seg button[aria-selected="true"]{background:var(--brand);color:var(--on-brand)}
+
+/* الخطوات */
+.steps{position:relative}
+.step{position:relative;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px 16px 16px;margin-bottom:14px;box-shadow:var(--shadow)}
+.step h2{font-size:19px;font-weight:800;margin:0 0 10px;display:flex;gap:10px;align-items:center}
+.n{background:var(--brand-soft);color:var(--brand-d);width:32px;height:32px;border-radius:99px;display:grid;place-items:center;font-size:17px;font-weight:800;flex:none}
+.step p{margin:0 0 6px}
+ol.nums{list-style:none;counter-reset:s;margin:6px 0 0;padding:0}
+ol.nums>li{counter-increment:s;position:relative;padding-inline-start:30px;margin:6px 0}
+ol.nums>li::before{content:counter(s,arabic-indic);position:absolute;inset-inline-start:0;top:3px;width:22px;height:22px;border-radius:99px;
+  background:var(--line);color:var(--ink);font-size:13px;font-weight:700;display:grid;place-items:center;line-height:1}
+.path{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:0 6px;font-weight:700;white-space:nowrap}
+
+/* الأزرار */
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:15px 16px;border-radius:16px;border:0;font:inherit;font-weight:800;font-size:19px;
+  background:var(--brand);color:var(--on-brand);text-decoration:none;cursor:pointer;box-shadow:0 6px 16px rgba(224,128,46,.35);transition:transform .08s,filter .15s}
+.btn:active{transform:scale(.98)} .btn:hover{filter:brightness(1.05)}
+.btn.alt{background:transparent;color:var(--brand-d);border:2px solid var(--brand);box-shadow:none;font-size:17px}
+.btn.ghost{background:var(--bg);color:var(--ink);border:1px solid var(--line);box-shadow:none;font-size:16px;font-weight:700;padding:12px}
+.row{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.meta{font-size:13px;color:var(--mut);text-align:center;margin-top:6px}
+
+/* الإدخال */
+label{display:block;font-weight:700;margin-bottom:6px}
+input{width:100%;font:inherit;font-size:18px;padding:13px 14px;border:1.5px solid var(--line);border-radius:14px;background:var(--bg);color:var(--ink)}
+input:focus{border-color:var(--brand);outline:none}
+input[aria-invalid="true"]{border-color:var(--stop)}
+
+/* الرسائل */
+.note{border-radius:14px;padding:12px 14px;font-size:15px;margin-top:12px}
+.note.warn{background:var(--warnbg);color:var(--warn)}
+.note.ok{background:var(--okbg);color:var(--ok)}
+.note.flash{animation:flash 1.2s ease 2}
+@keyframes flash{50%{box-shadow:0 0 0 4px var(--brand)}}
+
+/* كل يوم */
+.daily{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pill{border-radius:16px;padding:14px 10px;text-align:center}
+.pill .dot{width:44px;height:44px;border-radius:99px;margin:0 auto 6px;display:grid;place-items:center;font-size:22px;color:#fff}
+.pill small{display:block;color:var(--mut);font-size:13px}
+.pill.go{background:var(--okbg)} .pill.go .dot{background:#16a34a}
+.pill.end{background:var(--stopbg)} .pill.end .dot{background:#ea580c}
+.pill strong{font-size:17px}
+
+/* الأسئلة */
+.faq h2{margin-bottom:4px}
+details{border-top:1px solid var(--line)} details:first-of-type{border-top:0}
+summary{cursor:pointer;font-weight:700;padding:12px 0;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";width:9px;height:9px;border-right:2px solid var(--mut);border-bottom:2px solid var(--mut);transform:translateY(-3px) rotate(45deg);transition:transform .2s;flex:none;margin-inline-end:4px}
+details[open] summary::after{transform:translateY(2px) rotate(-135deg)}
+details p{margin:0 0 12px;color:var(--mut);font-size:15.5px}
+
+.foot{font-size:14px;color:var(--mut);text-align:center;margin:20px 8px 0}
+.toast{position:fixed;inset-inline:16px;bottom:calc(20px + env(safe-area-inset-bottom));max-width:420px;margin:0 auto;background:var(--ink);color:var(--bg);
+  border-radius:14px;padding:12px 16px;text-align:center;font-weight:700;opacity:0;transform:translateY(10px);transition:.25s;pointer-events:none}
+.toast.show{opacity:1;transform:none}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="hero"><img src="icon.png" alt=""><h1>سواقين المخبز</h1></div>
-  <p class="sub">تطبيق الدوام: زرار واحد أول الدوام وزرار آخره.</p>
+  <header class="hero">
+    <img src="icon.png" alt="" width="84" height="84">
+    <h1>سواقين المخبز</h1>
+    <p>تطبيق الدوام: زرار أول الدوام وزرار آخره.</p>
+    <div class="chips"><span class="chip">⏱ بيتسطّب في دقيقة</span><span class="chip">🔒 بس وقت الدوام</span></div>
+  </header>
 
-  <div class="tabs"><button class="tab" data-p="and">أندرويد</button><button class="tab" data-p="ios">آيفون</button></div>
+  <div class="banner" id="inapp" hidden>
+    <span>💡</span><div>إنت فاتح الصفحة من جوّه تطبيق تاني. عشان التحميل يشتغل: دوس <b>⋮</b> فوق ← <b>فتح في Chrome</b>.</div>
+  </div>
 
-  <section id="and">
+  <div class="seg" role="tablist" aria-label="نوع الموبايل">
+    <button role="tab" id="t-and" aria-controls="and" data-p="and">🤖 أندرويد</button>
+    <button role="tab" id="t-ios" aria-controls="ios" data-p="ios">📱 آيفون</button>
+  </div>
+
+  <!-- أندرويد -->
+  <section id="and" role="tabpanel" aria-labelledby="t-and" class="steps">
     <div class="step">
       <h2><span class="n">١</span>نزّل التطبيق</h2>
-      <a class="btn" id="apk" href="https://github.com/mosaadzomara1-tech/bakery-drivers/releases/latest/download/bakery-drivers.apk">📥 تحميل تطبيق سواقين المخبز</a>
-      <div class="ver" id="ver"></div>
-      <div class="hint">⚠ الملف بينزل بس — <b>لازم تفتحه عشان يتسطّب</b>:<br>
-        ١. افتح الملف من <b>الإشعارات</b> أو من <b>الملفات ← التنزيلات</b> (bakery-drivers.apk).<br>
-        ٢. لو قال «مصدر غير معروف» ← <b>الإعدادات</b> ← فعّل <b>السماح من المصدر ده</b> ← ارجع.<br>
-        ٣. دوس <b>تثبيت</b>.<br>
-        ٤. لو ظهر <b>Play Protect</b> ← «مزيد من التفاصيل» ← <b>«التثبيت على أي حال»</b>.<br>
-        💡 لو فاتح اللينك من جوّه واتساب: ⋮ ← <b>فتح في Chrome</b> الأول.</div>
+      <a class="btn" id="apk" href="https://github.com/mosaadzomara1-tech/bakery-drivers/releases/latest/download/bakery-drivers.apk">📥 تحميل التطبيق</a>
+      <div class="meta" id="ver"></div>
+      <div class="note warn" id="installHelp">
+        <b>⚠ الملف بينزل بس — لازم تفتحه عشان يتسطّب:</b>
+        <ol class="nums">
+          <li>افتح الملف من <b>الإشعارات</b> أو من <span class="path">الملفات ← التنزيلات</span></li>
+          <li>لو قال «مصدر غير معروف»: <span class="path">الإعدادات</span> ← فعّل <b>السماح من المصدر ده</b> ← ارجع</li>
+          <li>دوس <b>تثبيت</b></li>
+          <li>لو ظهر <b>Play Protect</b>: «مزيد من التفاصيل» ← <b>التثبيت على أي حال</b></li>
+        </ol>
+      </div>
     </div>
     <div class="step">
-      <h2><span class="n">٢</span>افتحه واكتب اسمك</h2>
-      <ol><li>اكتب اسمك مرة واحدة ← حفظ.</li><li>دوس <b>«ابدأ الدوام»</b>.</li>
-        <li>لما يسأل عن الموقع اختار <b>«السماح طوال الوقت»</b>.</li>
-        <li>من إعدادات التطبيق: البطارية ← <b>بلا قيود</b>.</li></ol>
+      <h2><span class="n">٢</span>افتحه واضبطه مرة واحدة</h2>
+      <ol class="nums">
+        <li>اكتب اسمك ← <b>حفظ</b></li>
+        <li>دوس <b>«ابدأ الدوام»</b></li>
+        <li>لما يسأل عن الموقع اختار <b>«السماح طوال الوقت»</b></li>
+        <li>من إعدادات التطبيق: <span class="path">البطارية ← بلا قيود</span></li>
+      </ol>
     </div>
     <div class="step">
       <h2><span class="n">٣</span>كل يوم</h2>
-      <ol><li>أول الدوام: <b>ابدأ الدوام</b> 🟢</li><li>آخر الدوام: <b>إنهاء الدوام</b> 🔴</li></ol>
+      <div class="daily">
+        <div class="pill go"><div class="dot">▶</div><strong>ابدأ الدوام</strong><small>أول ما تبدأ</small></div>
+        <div class="pill end"><div class="dot">■</div><strong>إنهاء الدوام</strong><small>آخر اليوم</small></div>
+      </div>
     </div>
   </section>
 
-  <section id="ios" hidden>
+  <!-- آيفون -->
+  <section id="ios" role="tabpanel" aria-labelledby="t-ios" class="steps" hidden>
     <div class="step">
       <h2><span class="n">١</span>نزّل التطبيق من App Store</h2>
-      <a class="btn" href="https://apps.apple.com/app/traccar-client/id843156974">تحميل Traccar Client</a>
+      <a class="btn" href="https://apps.apple.com/app/traccar-client/id843156974">📥 تحميل Traccar Client</a>
     </div>
     <div class="step">
       <h2><span class="n">٢</span>اكتب اسمك واضبطه</h2>
-      <input id="name" placeholder="اسمك الكامل (مثلاً: أحمد محمد)" autocomplete="name">
-      <div class="ver">اكتب اسمك الكامل عشان ميتلخبطش مع سوّاق تاني بنفس الاسم.</div>
-      <div class="hint" id="changed" hidden>⚠ <b>السيرفر اتغيّر</b> من آخر مرة ضبطت فيها التطبيق — دوس الزرار تحت تاني عشان موقعك يوصل.</div>
-      <div class="okmsg" id="uptodate" hidden>✅ تطبيقك مضبوط على السيرفر الحالي.</div>
-      <a class="btn" id="go" href="#">⚙ اضبط التطبيق تلقائياً</a>
-      <div class="hint">هيفتح التطبيق ويسأل عن الإعدادات ← دوس <b>OK</b>. بعدين شغّل الزرار واسمح بالموقع <b>«دائماً»</b>.</div>
+      <label for="name">اسمك الكامل</label>
+      <input id="name" placeholder="مثلاً: أحمد محمد" autocomplete="name" enterkeyhint="go">
+      <div class="meta">الاسم الكامل عشان ميتلخبطش مع سوّاق تاني بنفس الاسم.</div>
+      <div class="note warn" id="changed" hidden>⚠ <b>السيرفر اتغيّر</b> من آخر مرة ضبطت فيها التطبيق — دوس الزرار تحت تاني عشان موقعك يوصل.</div>
+      <div class="note ok" id="uptodate" hidden>✅ تطبيقك مضبوط على السيرفر الحالي.</div>
+      <a class="btn" id="go" href="#" style="margin-top:12px">⚙ اضبط التطبيق تلقائياً</a>
+      <div class="note warn">هيفتح التطبيق ويسأل عن الإعدادات ← دوس <b>OK</b>. بعدين شغّل الزرار واسمح بالموقع <b>«دائماً»</b>.</div>
     </div>
     <div class="step">
       <h2><span class="n">٣</span>كل يوم</h2>
-      <ol><li>أول الدوام: شغّل الزرار في Traccar 🟢</li><li>آخر الدوام: اقفله 🔴</li></ol>
+      <div class="daily">
+        <div class="pill go"><div class="dot">▶</div><strong>شغّل الزرار</strong><small>أول الدوام</small></div>
+        <div class="pill end"><div class="dot">■</div><strong>اقفل الزرار</strong><small>آخر الدوام</small></div>
+      </div>
     </div>
   </section>
 
-  <section class="step" aria-label="مشاكل شائعة">
+  <section class="step faq" aria-label="مشاكل شائعة">
     <h2>🛠 مشاكل شائعة</h2>
     <details><summary>موقعي مش باين عند المدير</summary>
       <p>اتأكد إن الدوام شغّال، وإن الموقع مسموح <b>طوال الوقت</b>، وإن النت شغّال. على الآيفون: افتح الصفحة دي تاني ودوس «اضبط التطبيق» — ممكن السيرفر يكون اتغيّر.</p></details>
     <details><summary>التطبيق بيقف لوحده بعد شوية</summary>
-      <p>أندرويد: الإعدادات ← التطبيقات ← سواقين المخبز ← البطارية ← <b>بلا قيود</b>. ولو فيه «توفير الطاقة» اقفله وإنت في الدوام.</p></details>
+      <p>أندرويد: الإعدادات ← التطبيقات ← سواقين المخبز ← البطارية ← <b>بلا قيود</b>. ولو «توفير الطاقة» شغّال اقفله وإنت في الدوام.</p></details>
     <details><summary>الملف نزل بس مش بيتسطّب</summary>
-      <p>امسح النسخة القديمة لو موجودة، ونزّل الملف تاني من الزرار فوق، واتبع خطوات «مصدر غير معروف».</p></details>
+      <p>امسح النسخة القديمة لو موجودة، نزّل الملف تاني من الزرار فوق، واتبع خطوات «مصدر غير معروف».</p></details>
     <details><summary>عايز أغيّر اسمي</summary>
       <p>أندرويد: من جوّه التطبيق. آيفون: اكتب الاسم الجديد هنا ودوس «اضبط التطبيق» تاني.</p></details>
   </section>
 
-  <section>
-    <a class="btn alt" id="share" href="#">📤 ابعت الصفحة دي لسوّاق على واتساب</a>
-  </section>
+  <div class="row">
+    <a class="btn alt" id="share" href="#">📤 ابعت الصفحة لسوّاق على واتساب</a>
+    <button class="btn ghost" id="copy" type="button" aria-label="نسخ اللينك">🔗</button>
+  </div>
 
   <p class="foot">🔒 الموقع بيتبعت <b>بس وإنت في الدوام</b>. لما تنهي الدوام مفيش أي تتبّع.</p>
 </div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 let CFG = {};
-const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-function show(p){ document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('act', t.dataset.p===p));
-  document.getElementById('and').hidden = p!=='and'; document.getElementById('ios').hidden = p!=='ios'; }
-document.querySelectorAll('.tab').forEach(t => t.onclick = () => show(t.dataset.p));
-show(isIOS ? 'ios' : 'and');
+const $ = id => document.getElementById(id);
+const ua = navigator.userAgent;
+const isIOS = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 function get(k){ try { return localStorage.getItem(k) || ''; } catch(e) { return ''; } }
 function set(k,v){ try { localStorage.setItem(k, v); } catch(e) {} }
+function toast(msg){ const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast.h); toast.h = setTimeout(()=>t.classList.remove('show'), 2200); }
+
+// التبويبات
+function show(p){
+  document.querySelectorAll('[role=tab]').forEach(t => t.setAttribute('aria-selected', t.dataset.p === p));
+  $('and').hidden = p !== 'and'; $('ios').hidden = p !== 'ios';
+}
+document.querySelectorAll('[role=tab]').forEach(t => t.onclick = () => show(t.dataset.p));
+show(isIOS ? 'ios' : 'and');
+
+// المتصفح الداخلي بتاع فيسبوك/انستجرام/واتساب على أندرويد بيمنع تحميل الملفات
+if (!isIOS && /; wv\)|FBAN|FBAV|Instagram|WhatsApp/i.test(ua)) $('inapp').hidden = false;
+
 // بيقارن السيرفر اللي الآيفون اتضبط عليه بالسيرفر الحالي في config.json
 function serverState(){
   const last = get('configuredServer');
-  document.getElementById('changed').hidden = !(last && CFG.server && last !== CFG.server);
-  document.getElementById('uptodate').hidden = !(last && CFG.server && last === CFG.server);
+  $('changed').hidden = !(last && CFG.server && last !== CFG.server);
+  $('uptodate').hidden = !(last && CFG.server && last === CFG.server);
 }
-fetch('config.json?t=' + Date.now()).then(r=>r.json()).then(c => {
-  CFG = c; if (c.apk) document.getElementById('apk').href = c.apk;
-  if (c.version) document.getElementById('ver').textContent = 'إصدار ' + c.version;
+fetch('config.json?t=' + Date.now()).then(r => r.json()).then(c => {
+  CFG = c; if (c.apk) $('apk').href = c.apk;
+  if (c.version) $('ver').textContent = 'إصدار ' + c.version;
   serverState();
-}).catch(()=>{});
-document.getElementById('share').onclick = e => {
+}).catch(() => {});
+
+// بعد التحميل نلفت النظر لخطوات التسطيب
+$('apk').addEventListener('click', () => {
+  const h = $('installHelp'); h.classList.remove('flash'); void h.offsetWidth; h.classList.add('flash');
+  toast('📥 بينزل… افتحه من الإشعارات');
+});
+
+// المشاركة
+const pageUrl = location.origin + location.pathname;
+$('share').onclick = e => {
   e.preventDefault();
-  const url = location.origin + location.pathname;
-  const text = 'تطبيق دوام سواقين المخبز — افتح اللينك ونزّل التطبيق:\n' + url;
-  if (navigator.share) navigator.share({title: 'سواقين المخبز', text: 'تطبيق دوام سواقين المخبز', url}).catch(()=>{});
+  const text = 'تطبيق دوام سواقين المخبز — افتح اللينك ونزّل التطبيق:\n' + pageUrl;
+  if (navigator.share) navigator.share({title: 'سواقين المخبز', text: 'تطبيق دوام سواقين المخبز', url: pageUrl}).catch(() => {});
   else location.href = 'https://wa.me/?text=' + encodeURIComponent(text);
 };
-const nameEl = document.getElementById('name');
-try { nameEl.value = localStorage.getItem('driverName') || ''; } catch(e) {}
-document.getElementById('go').onclick = e => {
+$('copy').onclick = () => {
+  (navigator.clipboard ? navigator.clipboard.writeText(pageUrl) : Promise.reject())
+    .then(() => toast('✅ اتنسخ اللينك'), () => prompt('انسخ اللينك:', pageUrl));
+};
+
+// ضبط الآيفون
+const nameEl = $('name');
+nameEl.value = get('driverName');
+nameEl.addEventListener('input', () => nameEl.removeAttribute('aria-invalid'));
+nameEl.addEventListener('keydown', e => { if (e.key === 'Enter') $('go').click(); });
+$('go').onclick = e => {
   e.preventDefault();
-  const n = nameEl.value.trim().replace(/\s+/g,' ');
-  if (n.length < 2) { nameEl.focus(); return; }
-  try { localStorage.setItem('driverName', n); } catch(e) {}
-  if (!CFG.server) { alert('السيرفر مش متاح دلوقتي — جرّب بعد دقيقة'); return; }
+  const n = nameEl.value.trim().replace(/\s+/g, ' ');
+  if (n.length < 2) { nameEl.setAttribute('aria-invalid', 'true'); nameEl.focus(); toast('اكتب اسمك الأول'); return; }
+  set('driverName', n);
+  if (!CFG.server) { toast('السيرفر مش متاح دلوقتي — جرّب بعد دقيقة'); return; }
   const p = new URLSearchParams({url: CFG.server, id: n, accuracy: 'high', interval: '30', distance: '0',
     angle: '0', heartbeat: '60', buffer: 'true', stop_detection: 'false', wakelock: 'true'});
   set('configuredServer', CFG.server); serverState();
