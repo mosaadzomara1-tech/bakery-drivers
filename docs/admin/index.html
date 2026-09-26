@@ -196,6 +196,7 @@ tfoot td{font-weight:800;background:var(--bg)}
       <img src="../icon.png" alt="">
       <h1><span class="tt">لوحة المتابعة</span> <span class="demo-tag" id="demoTag" hidden>تجريبي</span></h1>
       <span class="meta" id="updated"></span>
+      <button class="ib" id="shareBtn" title="ملخص النهارده للواتساب">📋 ملخص</button>
       <button class="ib" id="refreshBtn" title="تحديث">↻ تحديث</button>
       <button class="ib" id="logoutBtn">خروج</button>
     </div>
@@ -301,6 +302,7 @@ const LONG_SHIFT_H = 14;   // دوام أطول من كده = غالباً نس�
 const LOW_BATTERY = 15;
 const REFRESH_SEC = 30;
 const LOOKBACK_H = 16;     // بنجيب مسار من قبل نص الليل بالمدة دي
+const FULL_RELOAD_MIN = 15; // تحميل كامل للمسار كل ربع ساعة (وغير كده الجديد بس)
 
 const $ = id => document.getElementById(id);
 const store = {
@@ -315,6 +317,8 @@ const DAYS = ['الحد','الاتنين','التلات','الأربع','الخ�
 const pad = n => String(n).padStart(2,'0');
 function fmtDur(ms){ if (!ms || ms < 60000) return ms > 0 ? '<1د' : '—'; const m=Math.round(ms/60000), h=Math.floor(m/60); return h ? (m%60 ? `${h}س ${m%60}د` : `${h}س`) : `${m}د`; }
 function fmtTime(t){ t=new Date(t); const h=t.getHours()%12||12; return `${h}:${pad(t.getMinutes())} ${t.getHours()<12?'ص':'م'}`; }
+/** وقت بداية الدوام، ومعاه «امبارح» لو بدأ قبل النهارده. */
+function fmtSince(t){ const d0 = +startOfDay(Date.now()); return (t < d0 ? (t >= d0 - 864e5 ? 'امبارح ' : fmtDay(t) + ' ') : '') + fmtTime(t); }
 function fmtDay(t){ t=new Date(t); return `${DAYS[t.getDay()]} ${t.getDate()}/${t.getMonth()+1}`; }
 function ago(ms){ const m=Math.floor(ms/60000); if (m<1) return 'دلوقتي'; if (m<60) return `من ${m} دقيقة`; const h=Math.floor(m/60); if (h<24) return `من ${h} ساعة`; return `من ${Math.floor(h/24)} يوم`; }
 function km(m){ return m >= 0 ? (m/1000).toFixed(m < 10000 ? 1 : 0) + ' كم' : '—'; }
@@ -415,7 +419,8 @@ function demoApi(){
 }
 
 // ───────────── الحالة ─────────────
-let api = null, drivers = [], todayRoutes = {}, selectedId = null, filter = 'all', timer = null, lastLoad = 0;
+let api = null, drivers = [], todayRoutes = {}, selectedId = null, filter = 'all', timer = null;
+let routeWindow = 0, routeTo = 0, lastFull = 0, seenIds = new Set();
 let map, markers = {}, routeLayer = null, fitted = false;
 
 function stateOf(lastMs){
@@ -443,15 +448,24 @@ async function load(full){
   try {
     const [devs, poss] = await Promise.all([api.get('/api/devices'), api.get('/api/positions')]);
     const posBy = {}; poss.forEach(p => posBy[p.deviceId] = p);
-    // مسار النهارده: كل دقيقتين، أو لما نطلب تحديث كامل
-    if (full || Date.now() - lastLoad > 12e4){
-      const ids = devs.map(d => d.id);
-      // من ١٦ ساعة قبل نص الليل: عشان دوام بدأ امبارح يتحسب من بدايته الحقيقية
-      const from = new Date(startOfDay(Date.now()) - LOOKBACK_H * 36e5);
-      const route = ids.length ? await api.get('/api/reports/route', {deviceId: ids, from: from.toISOString(), to: new Date().toISOString()}) : [];
-      todayRoutes = {}; route.forEach(p => (todayRoutes[p.deviceId] ||= []).push(p));
-      Object.values(todayRoutes).forEach(l => l.sort((a,b) => a.fixTime < b.fixTime ? -1 : 1));
-      lastLoad = Date.now();
+    // مسار النهارده (ومعاه ١٦ ساعة قبل نص الليل عشان الدوام اللي بدأ امبارح يتحسب من بدايته).
+    // تحميل كامل أول مرة / كل ربع ساعة / يوم جديد / زرار تحديث — وغير كده الجديد بس (توفير نت).
+    const ids = devs.map(d => d.id), now = Date.now();
+    const windowStart = +startOfDay(now) - LOOKBACK_H * 36e5;
+    const needFull = full || routeWindow !== windowStart || now - lastFull > FULL_RELOAD_MIN * 6e4;
+    if (ids.length){
+      // تداخل ١٠ دقايق: المواقع اللي اتأخرت في الموبايل (من غير نت) ممكن توصل متأخر
+      const from = needFull ? windowStart : Math.max(windowStart, routeTo - 10 * 6e4);
+      const route = await api.get('/api/reports/route', {deviceId: ids, from: new Date(from).toISOString(), to: new Date(now).toISOString()});
+      if (needFull) { todayRoutes = {}; seenIds = new Set(); lastFull = now; routeWindow = windowStart; }
+      const touched = new Set();
+      route.forEach(p => {
+        const key = p.id ?? `${p.deviceId}|${p.fixTime}`;
+        if (seenIds.has(key)) return;
+        seenIds.add(key); (todayRoutes[p.deviceId] ||= []).push(p); touched.add(p.deviceId);
+      });
+      touched.forEach(id => todayRoutes[id].sort((a, b) => a.fixTime < b.fixTime ? -1 : 1));
+      routeTo = now;
     }
     drivers = devs.map(d => {
       const pos = posBy[d.id];
@@ -503,7 +517,7 @@ function renderLive(){
       <span class="main"><span class="n">${esc(d.name)}</span>
         <span class="s">${d.state === 'off'
           ? (d.lastMs ? 'آخر ظهور ' + ago(Date.now() - d.lastMs) : 'مابعتش أي موقع لسه')
-          : (d.state === 'lag' ? '⚠ آخر إرسال ' + ago(Date.now() - d.lastMs) : 'في الدوام' + (d.since ? ' من ' + fmtTime(d.since) : ''))
+          : (d.state === 'lag' ? '⚠ آخر إرسال ' + ago(Date.now() - d.lastMs) : 'في الدوام' + (d.since ? ' من ' + fmtSince(d.since) : ''))
             + (d.pos && d.state === 'live' ? ` · ${Math.round((d.pos.speed || 0) * 1.852)} كم/س` : '')
             + (d.battery != null && d.state !== 'off' ? ` · 🔋${d.battery}%` : '')}</span></span>
       <span class="h num">${fmtDur(d.hours)}<small>النهارده</small></span>
@@ -542,7 +556,7 @@ function renderMap(){
     if (all.length) { map.fitBounds(all, {padding: [40, 40], maxZoom: 14}); fitted = true; }
   }
 }
-function tipText(d){ return `${d.name} — ${STATE_TXT[d.state]}${d.lastMs ? ' · ' + ago(Date.now() - d.lastMs) : ''}`; }
+function tipText(d){ return `${esc(d.name)} — ${STATE_TXT[d.state]}${d.lastMs ? ' · ' + ago(Date.now() - d.lastMs) : ''}`; }
 
 // ───────────── تفاصيل السوّاق ─────────────
 let drawerRoute = [];
@@ -636,6 +650,7 @@ async function runReport(){
       cell.ms += ms; cell.dist += x.distance || 0; c.ms += ms; c.dist += x.distance || 0;
     });
     Object.values(data).forEach(c => c.n = Object.keys(c.days).length);
+    if (rows.length && !rows.some(x => x.startTime)) toast('⚠ نسخة Traccar دي مابترجعش وقت البداية والنهاية في التقرير — حدّث Traccar عشان الساعات تظهر');
     report = {from, to, dayKeys, data: Object.values(data).sort((a, b) => b.ms - a.ms)};
     renderReport();
   } catch (e) {
@@ -662,13 +677,41 @@ function downloadCsv(){
   const {dayKeys, data, from, to} = report;
   const h = ms => (ms / 36e5).toFixed(2);
   const rows = [['السوّاق', ...dayKeys, 'مجموع الساعات', 'مجموع الكيلومترات', 'أيام الشغل']];
-  data.forEach(c => rows.push([c.name, ...dayKeys.map(k => c.days[k] ? h(c.days[k].ms) : ''), h(c.ms), (c.dist / 1000).toFixed(1), c.n]));
+  // اسم بيبدأ بـ = أو + أو - أو @ ممكن Excel يشغّله كمعادلة
+  const safe = v => /^[=+\-@\t\r]/.test(v) ? "'" + v : v;
+  data.forEach(c => rows.push([safe(c.name), ...dayKeys.map(k => c.days[k] ? h(c.days[k].ms) : ''), h(c.ms), (c.dist / 1000).toFixed(1), c.n]));
   const csv = '﻿' + rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\r\n');
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([csv], {type: 'text/csv;charset=utf-8'}));
   a.download = `bakery-hours_${isoDate(from)}_${isoDate(addDays(to, -1))}.csv`;
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+// ───────────── ملخص النهارده (للواتساب) ─────────────
+function buildSummary(){
+  const now = Date.now(), by = st => drivers.filter(d => d.state === st);
+  const total = drivers.reduce((a, d) => a + d.hours, 0);
+  const L = [`*ملخص دوام السواقين* — ${fmtDay(now)} (${fmtTime(now)})`, ''];
+  const live = by('live'), lag = by('lag'), off = by('off');
+  L.push(`🟢 في الدوام (${live.length})` + (live.length ? ': ' + live.map(d => d.name + (d.since ? ` من ${fmtSince(d.since)}` : '')).join('، ') : ''));
+  if (lag.length) L.push(`⚠ الإرسال متأخر (${lag.length}): ` + lag.map(d => `${d.name} (${ago(now - d.lastMs)})`).join('، '));
+  L.push(`⚪ خارج الدوام (${off.length})`);
+  L.push('', `⏱ *ساعات النهارده: ${fmtDur(total)}*`);
+  drivers.filter(d => d.hours > 0).sort((a, b) => b.hours - a.hours)
+    .forEach(d => L.push(`• ${d.name}: ${fmtDur(d.hours)} · ${km(d.dist)}`));
+  const alerts = [...document.querySelectorAll('#alerts .alert .t')].map(e => e.textContent.trim());
+  if (alerts.length) L.push('', '*تنبيهات:*', ...alerts.map(a => '• ' + a));
+  return L.join('\n');
+}
+async function shareSummary(){
+  if (!drivers.length) return toast('مفيش بيانات لسه');
+  const text = buildSummary();
+  if (navigator.share && matchMedia('(pointer:coarse)').matches) {
+    try { await navigator.share({text}); return; } catch (e) { if (e.name === 'AbortError') return; }
+  }
+  try { await navigator.clipboard.writeText(text); toast('✅ الملخص اتنسخ — الصقه في الواتساب'); }
+  catch (e) { window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener'); }
 }
 
 // ───────────── الدخول والخروج ─────────────
@@ -707,6 +750,7 @@ $('loginForm').onsubmit = async e => {
 $('demoBtn').onclick = () => start(demoApi());
 $('logoutBtn').onclick = logout;
 $('refreshBtn').onclick = () => load(true);
+$('shareBtn').onclick = shareSummary;
 
 // ───────────── التبويبات والفلاتر ─────────────
 document.querySelectorAll('nav.tabs button').forEach(b => b.onclick = () => {
@@ -742,7 +786,10 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && ap
   if (auth) {
     $('lRemember').checked = true;
     try { const a = traccarApi(auth.server, auth.email, auth.pass); await a.get('/api/devices'); await start(a); }
-    catch (e) { if (e instanceof AuthError) store.del('adm_auth'); showLoginError(e instanceof AuthError ? 'الجلسة خلصت — ادخل تاني.' : ''); }
+    catch (e) {
+      if (e instanceof AuthError) { store.del('adm_auth'); showLoginError('الجلسة خلصت — ادخل تاني.'); }
+      else { $('lPass').value = auth.pass; showLoginError('مش قادر أوصل للسيرفر دلوقتي — دوس «دخول» تاني بعد شوية.'); }
+    }
   }
 })();
 </script>
