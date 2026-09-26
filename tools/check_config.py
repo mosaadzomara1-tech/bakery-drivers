@@ -31,6 +31,8 @@ def https_url(key):
 
 https_url("server")
 https_url("apk")
+if "admin" in cfg:  # اختياري: عنوان لوحة Traccar لو مختلف عن server
+    https_url("admin")
 v = cfg.get("version")
 if not isinstance(v, int) or isinstance(v, bool) or v < 1:
     errors.append(f"«version» لازم يكون رقم صحيح موجب (القيمة الحالية: {v!r})")
