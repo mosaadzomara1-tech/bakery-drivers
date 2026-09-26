@@ -4,7 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>سواقين المخبز</title>
+<meta name="description" content="تطبيق دوام سواقين المخبز: زرار أول الدوام وزرار آخره.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#e0802e">
+<meta property="og:type" content="website">
+<meta property="og:title" content="سواقين المخبز — تطبيق الدوام">
+<meta property="og:description" content="نزّل التطبيق واضبطه في دقيقة: زرار أول الدوام وزرار آخره.">
+<meta property="og:image" content="https://mosaadzomara1-tech.github.io/bakery-drivers/icon.png">
 <link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
 <style>
 :root{--bg:#fff7ef;--card:#fff;--ink:#1b1f24;--mut:#6b7280;--line:#f1dcc6;--brand:#e0802e;--ok:#15803d;--okbg:#dcfce7;--warnbg:#fef3c7;--warn:#92400e}
 @media (prefers-color-scheme:dark){:root{--bg:#14110e;--card:#1d1916;--ink:#f1ece6;--mut:#a39a90;--line:#3a2f25;--okbg:#123321;--ok:#4ade80;--warnbg:#3a2a0c;--warn:#fbbf24}}
@@ -27,6 +35,12 @@ ol{margin:4px 0 0;padding-inline-start:22px} li{margin:3px 0}
 .tab{flex:1;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
 .tab.act{background:var(--brand);color:#fff;border-color:var(--brand)}
 .foot{font-size:13px;color:var(--mut);text-align:center;margin:18px 0}
+.okmsg{background:var(--okbg);color:var(--ok);border-radius:12px;padding:10px 12px;font-size:14px;margin-top:10px}
+.btn.alt{background:transparent;color:var(--brand);border:2px solid var(--brand)}
+details{border-top:1px solid var(--line);padding:8px 0} details:first-of-type{border-top:0}
+summary{cursor:pointer;font-weight:700}
+details p{margin:6px 0 0;color:var(--mut);font-size:15px}
+.ver{font-size:12px;color:var(--mut);text-align:center;margin-top:6px}
 </style>
 </head>
 <body>
@@ -40,6 +54,7 @@ ol{margin:4px 0 0;padding-inline-start:22px} li{margin:3px 0}
     <div class="step">
       <h2><span class="n">١</span>نزّل التطبيق</h2>
       <a class="btn" id="apk" href="https://github.com/mosaadzomara1-tech/bakery-drivers/releases/latest/download/bakery-drivers.apk">📥 تحميل تطبيق سواقين المخبز</a>
+      <div class="ver" id="ver"></div>
       <div class="hint">⚠ الملف بينزل بس — <b>لازم تفتحه عشان يتسطّب</b>:<br>
         ١. افتح الملف من <b>الإشعارات</b> أو من <b>الملفات ← التنزيلات</b> (bakery-drivers.apk).<br>
         ٢. لو قال «مصدر غير معروف» ← <b>الإعدادات</b> ← فعّل <b>السماح من المصدر ده</b> ← ارجع.<br>
@@ -66,10 +81,33 @@ ol{margin:4px 0 0;padding-inline-start:22px} li{margin:3px 0}
     </div>
     <div class="step">
       <h2><span class="n">٢</span>اكتب اسمك واضبطه</h2>
-      <input id="name" placeholder="اسمك (مثلاً: أحمد)">
+      <input id="name" placeholder="اسمك الكامل (مثلاً: أحمد محمد)" autocomplete="name">
+      <div class="ver">اكتب اسمك الكامل عشان ميتلخبطش مع سوّاق تاني بنفس الاسم.</div>
+      <div class="hint" id="changed" hidden>⚠ <b>السيرفر اتغيّر</b> من آخر مرة ضبطت فيها التطبيق — دوس الزرار تحت تاني عشان موقعك يوصل.</div>
+      <div class="okmsg" id="uptodate" hidden>✅ تطبيقك مضبوط على السيرفر الحالي.</div>
       <a class="btn" id="go" href="#">⚙ اضبط التطبيق تلقائياً</a>
       <div class="hint">هيفتح التطبيق ويسأل عن الإعدادات ← دوس <b>OK</b>. بعدين شغّل الزرار واسمح بالموقع <b>«دائماً»</b>.</div>
     </div>
+    <div class="step">
+      <h2><span class="n">٣</span>كل يوم</h2>
+      <ol><li>أول الدوام: شغّل الزرار في Traccar 🟢</li><li>آخر الدوام: اقفله 🔴</li></ol>
+    </div>
+  </section>
+
+  <section class="step" aria-label="مشاكل شائعة">
+    <h2>🛠 مشاكل شائعة</h2>
+    <details><summary>موقعي مش باين عند المدير</summary>
+      <p>اتأكد إن الدوام شغّال، وإن الموقع مسموح <b>طوال الوقت</b>، وإن النت شغّال. على الآيفون: افتح الصفحة دي تاني ودوس «اضبط التطبيق» — ممكن السيرفر يكون اتغيّر.</p></details>
+    <details><summary>التطبيق بيقف لوحده بعد شوية</summary>
+      <p>أندرويد: الإعدادات ← التطبيقات ← سواقين المخبز ← البطارية ← <b>بلا قيود</b>. ولو فيه «توفير الطاقة» اقفله وإنت في الدوام.</p></details>
+    <details><summary>الملف نزل بس مش بيتسطّب</summary>
+      <p>امسح النسخة القديمة لو موجودة، ونزّل الملف تاني من الزرار فوق، واتبع خطوات «مصدر غير معروف».</p></details>
+    <details><summary>عايز أغيّر اسمي</summary>
+      <p>أندرويد: من جوّه التطبيق. آيفون: اكتب الاسم الجديد هنا ودوس «اضبط التطبيق» تاني.</p></details>
+  </section>
+
+  <section>
+    <a class="btn alt" id="share" href="#">📤 ابعت الصفحة دي لسوّاق على واتساب</a>
   </section>
 
   <p class="foot">🔒 الموقع بيتبعت <b>بس وإنت في الدوام</b>. لما تنهي الدوام مفيش أي تتبّع.</p>
@@ -81,9 +119,26 @@ function show(p){ document.querySelectorAll('.tab').forEach(t=>t.classList.toggl
   document.getElementById('and').hidden = p!=='and'; document.getElementById('ios').hidden = p!=='ios'; }
 document.querySelectorAll('.tab').forEach(t => t.onclick = () => show(t.dataset.p));
 show(isIOS ? 'ios' : 'and');
+function get(k){ try { return localStorage.getItem(k) || ''; } catch(e) { return ''; } }
+function set(k,v){ try { localStorage.setItem(k, v); } catch(e) {} }
+// بيقارن السيرفر اللي الآيفون اتضبط عليه بالسيرفر الحالي في config.json
+function serverState(){
+  const last = get('configuredServer');
+  document.getElementById('changed').hidden = !(last && CFG.server && last !== CFG.server);
+  document.getElementById('uptodate').hidden = !(last && CFG.server && last === CFG.server);
+}
 fetch('config.json?t=' + Date.now()).then(r=>r.json()).then(c => {
   CFG = c; if (c.apk) document.getElementById('apk').href = c.apk;
+  if (c.version) document.getElementById('ver').textContent = 'إصدار ' + c.version;
+  serverState();
 }).catch(()=>{});
+document.getElementById('share').onclick = e => {
+  e.preventDefault();
+  const url = location.origin + location.pathname;
+  const text = 'تطبيق دوام سواقين المخبز — افتح اللينك ونزّل التطبيق:\n' + url;
+  if (navigator.share) navigator.share({title: 'سواقين المخبز', text: 'تطبيق دوام سواقين المخبز', url}).catch(()=>{});
+  else location.href = 'https://wa.me/?text=' + encodeURIComponent(text);
+};
 const nameEl = document.getElementById('name');
 try { nameEl.value = localStorage.getItem('driverName') || ''; } catch(e) {}
 document.getElementById('go').onclick = e => {
@@ -94,6 +149,7 @@ document.getElementById('go').onclick = e => {
   if (!CFG.server) { alert('السيرفر مش متاح دلوقتي — جرّب بعد دقيقة'); return; }
   const p = new URLSearchParams({url: CFG.server, id: n, accuracy: 'high', interval: '30', distance: '0',
     angle: '0', heartbeat: '60', buffer: 'true', stop_detection: 'false', wakelock: 'true'});
+  set('configuredServer', CFG.server); serverState();
   location.href = 'org.traccar.client://?' + p.toString();
 };
 </script>
