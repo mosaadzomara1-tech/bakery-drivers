@@ -1,0 +1,18 @@
+name: check-config
+
+on:
+  push:
+    paths: ['docs/config.json', 'tools/check_config.py', '.github/workflows/check-config.yml']
+  pull_request:
+    paths: ['docs/config.json', 'tools/check_config.py', '.github/workflows/check-config.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tools/check_config.py docs/config.json
