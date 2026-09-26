@@ -33,6 +33,10 @@ https_url("server")
 https_url("apk")
 if "admin" in cfg:  # اختياري: عنوان لوحة التحكم لو مختلف عن server
     https_url("admin")
+if "admin_phone" in cfg:  # اختياري (v2): رقم واتساب الإدارة اللي التطبيق بيفتحه
+    ap = str(cfg["admin_phone"])
+    if not (ap.isdigit() and 10 <= len(ap) <= 15):
+        errors.append(f"«admin_phone» لازم أرقام بس بالكود الدولي، زي 9665xxxxxxxx (القيمة الحالية: {ap})")
 v = cfg.get("version")
 if not isinstance(v, int) or isinstance(v, bool) or v < 1:
     errors.append(f"«version» لازم يكون رقم صحيح موجب (القيمة الحالية: {v!r})")
