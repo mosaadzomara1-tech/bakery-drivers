@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#e0802e">
+<title>طلبات الجملة</title>
+<meta property="og:title" content="🧺 طلبات الجملة — المخبز">
+<meta property="og:description" content="اطلب من المخبز بنفسك: ادخل برقم المحل.">
+<style>
+:root{--bg:#faf6f1;--ink:#2b2118;--muted:#7a6a5c;--brand:#e0802e}
+@media (prefers-color-scheme:dark){:root{--bg:#17120e;--ink:#f3ebe3;--muted:#b5a594}}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;text-align:center;padding:16px}
+p{color:var(--muted)} a{color:var(--brand);font-weight:700}
+</style>
+</head>
+<body>
+<main><h1>🧺 طلبات الجملة</h1><p id="msg">بنفتح صفحة الطلبات…</p></main>
+<script>
+// لينك ثابت للمحلات: عنوان السيرفر بيتغيّر، بس config.json بيتحدّث لوحده ← نحوّل لـ <السيرفر>/w
+(async () => {
+  const msg = document.getElementById('msg');
+  try {
+    const c = await (await fetch('../config.json?t=' + Date.now(), {cache: 'no-store'})).json();
+    if (!/^https:\/\//.test(c.server || '')) throw new Error('no server');
+    location.replace(c.server.replace(/\/+$/, '') + '/w');
+  } catch (e) {
+    msg.innerHTML = 'السيرفر مش شغّال دلوقتي — جرّب كمان شوية، أو كلّم المخبز. <br><a href="">حاول تاني</a>';
+  }
+})();
+</script>
+</body>
+</html>
